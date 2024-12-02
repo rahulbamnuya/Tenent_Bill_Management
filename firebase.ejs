@@ -1,13 +1,16 @@
+
 const admin = require("firebase-admin");
-const serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert({
+        project_id: "billcalculation-92aee",
+        private_key: "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9...-----END PRIVATE KEY-----\n",
+        client_email: "firebase-adminsdk-b53mw@billcalculation-92aee.iam.gserviceaccount.com",
+    }),
 });
 
 const db = admin.firestore();
 const Users = db.collection("Users");
 const Tenants = db.collection("Tenants");
 const Tenants_bill_history = db.collection("Tenants_bill_history");
-module.exports = { Users, Tenants,Tenants_bill_history };
-
+module.exports = { Users, Tenants, Tenants_bill_history };
