@@ -18,17 +18,17 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Route to display the add user form
-app.get("/add", (req, res) => {
-    res.render("index"); // Render the add_user.ejs file
-});
-app.get('/home', (req, res) => {
+app.get('/', (req, res) => {
   
   const newPrice=1
   const tenent_count=1
   res.render('home',{newPrice,tenent_count}); // Render the home page
 });
+// Route to display the add user form
+app.get("/add", (req, res) => {
+    res.render("index"); // Render the add_user.ejs file
+});
+
 app.post("/edit_bill_amount", async (req, res) => {
  
  
