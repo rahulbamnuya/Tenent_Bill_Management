@@ -261,5 +261,5 @@ app.post('/delete-user/:userId', async (req, res) => {
 // Start the server
 const Port = process.env.PORT || 8000
 app.listen(Port, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+    console.log(`Server is running on http://localhost:${Port}`);
 });
