@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Bill Management</title>
+      <link rel="stylesheet" href="CSS/header.css">
+      <link rel="stylesheet" href="CSS/bill_manage.css">
+      
+</head>
+
+<body>
+
+      <div class="bill-management">
+            <h1>Bill Management</h1>
+
+            <div class="tenant-selection">
+                  <label for="tenant-select">Select Tenant</label>
+                  <select id="tenant-select" onchange="handleTenantChange()">
+                        <option value="">Select Tenant</option>
+                        <option value="1">John Doe</option>
+                        <option value="2">Jane Smith</option>
+                  </select>
+            </div>
+
+            <table id="bill-table" class="hidden">
+                  <thead>
+                        <tr>
+                              <th>Month</th>
+                              <th>Amount</th>
+                              <th>Status</th>
+                        </tr>
+                  </thead>
+                  <tbody>
+                        <tr>
+                              <td>January 2023</td>
+                              <td>$150.00</td>
+                              <td>Paid</td>
+                        </tr>
+                        <tr>
+                              <td>February 2023</td>
+                              <td>$165.50</td>
+                              <td>Unpaid</td>
+                        </tr>
+                        <tr>
+                              <td>March 2023</td>
+                              <td>$140.25</td>
+                              <td>Paid</td>
+                        </tr>
+                  </tbody>
+            </table>
+      </div>
+
+      <script>
+            function handleTenantChange() {
+                  const tenantSelect = document.getElementById('tenant-select');
+                  const selectedTenant = tenantSelect.value;
+                  const billTable = document.getElementById('bill-table');
+
+                  if (selectedTenant) {
+                        billTable.classList.remove('hidden');
+                  } else {
+                        billTable.classList.add('hidden');
+                  }
+            }
+      </script>
+
+</body>
+
+</html>

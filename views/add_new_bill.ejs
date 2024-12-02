@@ -1,0 +1,58 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Tenant Management Dashboard</title>
+      <link rel="stylesheet" href="CSS/header.css">
+      <link rel="stylesheet" href="CSS/add_new_bill.css">
+
+</head>
+
+<body>
+      <%- include('partials/header') %>
+
+
+                        
+                        <div class="dialog" id="add-bill-dialog">
+                              <div class="dialog-content">
+                                    <form class="Bill-form" action="/add_new_bill/<%=userId%>" method="POST">
+                                    <h3>Add New Bill</h3>
+                                    <div class="form-group">
+                                          <label for="previous-reading">Previous Reading</label>
+                                          <input type="text" id="previous_reading" name="previous_reading" value="1000" >
+                                    </div>
+                                    <div class="form-group">
+                                          <label for="current-reading">Current Reading</label>
+                                          <input type="text" id="current_reading" name="current_reading" value="2000">
+                                    </div>
+                                    <!-- <div class="form-group">
+                                          <label>New Reading</label>
+                                          <input type="text" id="new_reading" name="new_reading" value="1000">
+                                          
+                                    </div> -->
+                                    <!-- <div class="form-group">
+                                          <label>Amount to Pay</label>
+                                          <input type="text" id="amount_to_pay" name="amount_to_pay" value="500">
+                                   
+                                    </div> -->
+                                    <div class="form-group">
+                                          <label>Bill Date</label>
+                                          <input type="date" id="bill_date" name="bill_date">
+                                    </div>
+                                    <!-- <a href="/detail"> -->
+                                          <button class="btn" id="save-bill-btn">Add Bill</button>
+                                    <!-- </a> -->
+                              </div>
+                              </form>
+                        </div>
+                        
+                        
+                        </div>
+</body>
+
+
+
+</html>

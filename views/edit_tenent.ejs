@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Tenant Management Dashboard</title>
+      <link rel="stylesheet" href="CSS/header.css">
+      <link rel="stylesheet" href="CSS/addTenant.css">
+<style>
+      /* General reset */
+
+
+/* General reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f3f4f6;
+  color: #333;
+}
+
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Header */
+.header {
+  background-color: #ffffff;
+  padding: 1rem 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.logo .icon {
+  width: 32px;
+  height: 32px;
+  background-color: #4f46e5;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  background-color: #4f46e5;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profile-button .icon {
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  margin-right: 0.5rem;
+}
+
+/* Container */
+.containers {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #4f46e5;
+  text-align: center;
+}
+
+/* Form styles */
+.tenant-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.tenant-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.tenant-form input[type="text"] {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 1rem;
+  background-color: #4f46e5;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #3f40d0;
+}
+
+</style>
+</head>
+
+<body>
+      <%- include('partials/header') %>
+
+
+            <main class="containers main-content">
+                  <h1 class="title">Edit Tenant</h1>
+                  <form class="form-group" action="/edit_tenent/<%= userId %>" method="POST"> 
+
+                  
+
+   
+                        <div class="form-group">
+                              <label for="name">Name</label>
+                              <input type="text" id="name" name="name" required value="<%=userData.name%>">
+                        </div>
+                        <div class="form-group">
+                              <label for="mobile">Mobile Number</label>
+                              <input type="text" id="mobile" name="mobile" required value="<%=userData.RoomRent%>"> 
+                        </div>
+                       
+                        <div class="form-group">
+                              <label for="RoomRent">Room Rent</label>
+                              <input type="text" id="RoomRent" name="RoomRent" required value="<%=userData.RoomRent%>">
+                        </div>
+                        <div class="form-group">
+                              <label for="previousAddress">Previous Address</label>
+                              <input type="text" id="previousAddress" name="previousAddress" value="<%=userData.previousAddress%>" required>
+                        </div>
+                        <!-- <a href="/view_tenent"> -->
+                             
+                              
+                                    <button class="submit-btn" type="submit">Edit</button>
+                             
+                        
+                        <!-- </a> -->
+                  </form>
+            </main>
+</body>
+
+</html>
