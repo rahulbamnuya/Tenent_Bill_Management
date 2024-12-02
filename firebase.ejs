@@ -1,16 +1,14 @@
-require("dotenv").config();
+
+
 const admin = require("firebase-admin");
+const serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
-    credential: admin.credential.cert({
-        project_id: process.env.FIREBASE_PROJECT_ID,
-        private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Replace `\n` with actual newlines
-        client_email: process.env.FIREBASE_CLIENT_EMAIL,
-    }),
+credential: admin.credential.cert(serviceAccount),
 });
 
 const db = admin.firestore();
 const Users = db.collection("Users");
 const Tenants = db.collection("Tenants");
 const Tenants_bill_history = db.collection("Tenants_bill_history");
-module.exports = { Users, Tenants, Tenants_bill_history };
+module.exports = { Users, Tenants,Tenants_bill_history };
