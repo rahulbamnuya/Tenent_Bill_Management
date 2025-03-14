@@ -1,0 +1,74 @@
+body {
+font-family: Arial, sans-serif;
+background-color: #f4f4f4;
+margin: 0;
+padding: 0;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+}
+
+.bill-management {
+max-width: 800px;
+background-color: #fff;
+padding: 20px;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+text-align: center;
+font-size: 2rem;
+margin-bottom: 20px;
+color: #333;
+}
+
+.tenant-selection {
+margin-bottom: 20px;
+}
+
+label {
+display: block;
+margin-bottom: 8px;
+font-size: 1rem;
+color: #555;
+}
+
+select {
+width: 100%;
+padding: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+font-size: 1rem;
+background-color: #fff;
+}
+
+table {
+width: 100%;
+border-collapse: collapse;
+margin-top: 20px;
+}
+
+th, td {
+padding: 12px;
+border: 1px solid #ccc;
+text-align: left;
+}
+
+th {
+background-color: #f4f4f4;
+font-weight: bold;
+}
+
+td {
+font-size: 1rem;
+}
+
+tr:nth-child(even) {
+background-color: #f9f9f9;
+}
+
+.hidden {
+display: none;
+}
