@@ -25,19 +25,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route to display the add user form
-app.get("/", async (req, res) => {
-    try {
-        // Assuming you get the logged-in user email from session or database
-        const userEmail = req.session.userEmail || "guest@example.com"; // Replace with actual logic
-
-        const newPrice = 1;
-        const tenent_count = 1;
-
-        res.render("home", { newPrice, tenent_count, userEmail }); // Pass email to EJS
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+app.get("/",(req,res)=>{
+  res.render("login")
+})
 
 app.get("/login",(req,res)=>{
   res.render("login")
