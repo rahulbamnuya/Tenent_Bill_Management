@@ -50,9 +50,14 @@
                   </div>
 
                   <div class="actions">
-                        <a href="/addTenant"><button class="btn primary">+ Add New Tenant</button></a>
-                        <a href="/view_tenent"><button class="btn secondary">View All Tenants</button></a>
+                        <a href="/addTenant?email=<%= userEmail %>">
+                              <button class="btn primary">+ Add New Tenant</button>
+                        </a>
+                        <a href="/view_tenent?email=<%= userEmail %>">
+                              <button class="btn secondary">View All Tenants</button>
+                        </a>
                   </div>
+
             </main>
 
             <script>

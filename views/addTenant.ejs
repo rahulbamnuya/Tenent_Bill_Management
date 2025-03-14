@@ -17,6 +17,7 @@
             <main class="containers main-content">
                   <h1 class="title">Add New Tenant</h1>
                   <form class="tenant-form" action="/add_new" method="POST">
+
                         <div class="form-group">
                               <label for="name">Name</label>
                               <input type="text" id="name" name="name" required>
@@ -38,6 +39,8 @@
                               <input type="text" id="previousAddress" name="previousAddress">
                         </div>
                         <!-- <a href="/view_tenent"> -->
+                              <input type="hidden" name="userEmail" value="<%= userEmail %>">
+                              
                               <button class="submit-btn" type="submit">Add Tenant</button>
                         <!-- </a> -->
                   </form>
