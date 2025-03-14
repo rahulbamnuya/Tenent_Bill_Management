@@ -2,10 +2,15 @@ const express = require("express");
 const path = require("path");
 const Users = require("./firebase.ejs").Users; // Import Users collection
 const Tenants=require("./firebase.ejs").Tenants;
+const LoginUsers=require("./firebase.ejs").LoginUsers;
 const Tenants_bill_history=require("./firebase.ejs").Tenants_bill_history
-
-// console.log(Tenants)
 const app = express();
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, "public")));
+
+app.set("view engine", "ejs");
+// console.log(Tenants)
+
 const PORT = process.env.PORT || 3000;
 
 // Set up EJS as the view engine
@@ -20,12 +25,96 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route to display the add user form
-app.get('/', (req, res) => {
+app.get("/", async (req, res) => {
+    try {
+        // Assuming you get the logged-in user email from session or database
+        const userEmail = req.session.userEmail || "guest@example.com"; // Replace with actual logic
 
-  const newPrice = 1
-  const tenent_count = 1
-  res.render('home', { newPrice, tenent_count }); // Render the home page
+        const newPrice = 1;
+        const tenent_count = 1;
+
+        res.render("home", { newPrice, tenent_count, userEmail }); // Pass email to EJS
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
+
+app.get("/login",(req,res)=>{
+  res.render("login")
+})
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+
+  console.log("User trying to log in:", email);
+
+  if (!email || !password) {
+    return res.redirect("/login?error=All fields are required!");
+  }
+
+  try {
+    const userDoc = await LoginUsers.doc(email).get();
+
+    if (userDoc.exists) {
+      console.log("✅ User found! Redirecting to home...");
+      console.log(`User email id is:", ${email}`);
+
+      const newPrice = 1;
+      const tenent_count = 1;
+
+      return res.render("home", { userEmail: email, newPrice, tenent_count });
+    } else {
+      console.log("❌ User not found! Redirecting to signup...");
+      return res.redirect("/signup?error=User not found! Please sign up.");
+    }
+  } catch (error) {
+    console.error("Login error:", error.message);
+    return res.redirect("/login?error=Internal server error.");
+  }
+});
+app.get("/signup", (req, res) => {
+  res.render("signup");
+});
+
+app.post("/signup", async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.redirect("/signup?error=All fields are required!");
+  }
+
+  try {
+    // Check if user already exists
+    const userDoc = await LoginUsers.doc(email).get();
+    if (userDoc.exists) {
+      console.log("❌ User already exists! Redirecting to login...");
+      return res.redirect("/login?error=User already exists! Please log in.");
+    }
+
+    // Save user data in Firestore
+    await LoginUsers.doc(email).set({
+      name,
+      email,
+      password, // ⚠️ Store as plain text (not recommended, use bcrypt for hashing)
+      createdAt: new Date(),
+    });
+
+    console.log(`✅ New user registered: ${email}`);
+
+    const newPrice = 1;
+    const tenent_count = 1;
+
+    return res.render("home", { userEmail: email, newPrice, tenent_count });
+  } catch (error) {
+    console.error("Signup error:", error.message);
+    return res.redirect("/signup?error=Internal server error.");
+  }
+});
+
+
 app.get("/add", (req, res) => {
     res.render("index"); // Render the add_user.ejs file
 });
@@ -71,15 +160,19 @@ app.get("/detail/:userId", async (req, res) => {
 
 ///X
 app.get("/addTenant",(req,res)=>{
-  res.render("addTenant")
+  const userEmail = req.query.email || "guest@example.com"; // Get email from URL
+  console.log(userEmail)
+  res.render("addTenant",{userEmail:userEmail})
 })
 app.post("/add_new",async (req,res)=>{
    try {
-        const { name, mobile, room,previousAddress,RoomRent } = req.body; // Get data from the form
-        const newUserRef = await Tenants.add({name,mobile,room,previousAddress,RoomRent})
+        const { name, mobile, room,previousAddress,RoomRent,userEmail } = req.body; // Get data from the form
+        console.log(name,mobile,room,previousAddress,RoomRent,userEmail)
+        const newUserRef = await Tenants.add({name,mobile,room,previousAddress,RoomRent,userEmail})
         console.log(`User added with ID: ${newUserRef.id}`);
-        res.redirect('/view_tenent');
+        res.redirect('/view_tenent?email=' + encodeURIComponent(userEmail));
         // Redirect back to the form (or a success page)
+        
     } catch (error) {
         console.error("Error adding user: ", error);
         res.status(500).send("Error adding user");
@@ -113,33 +206,53 @@ console.log("month reading",data.month_reading)
 console.log("bill date",data.bill_date)
 console.log("current reading",data.current_reading)
 console.log("previous reading",data.previous_reading)
-})
-app.get("/view_tenent",async(req,res)=>{
-  try{
-    const usersSnapshot=await Tenants.get();
-    const users=[];
-   usersSnapshot.forEach((doc)=>{
-    const userData=doc.data();
-    users.push({
-      id:doc.id,
-      name:userData.name,
-      mobile:userData.mobile,
-      room:userData.room,
-      previousAddress:userData.previousAddress,
-      RoomRent:userData.RoomRent
-    })
+});
+
+app.get("/view_tenent", async (req, res) => {
+  const userEmail = req.query.email || "guest@example.com"; // ✅ Declare userEmail outside try
+
+  try {
+    console.log(`Searching for tenants with email: ${userEmail}`);
+
+    // Query Firestore for tenants with matching email
+    const usersSnapshot = await Tenants.where("userEmail", "==", userEmail).get();
+
+    const users = [];
+    usersSnapshot.forEach((doc) => {
+      const userData = doc.data();
+      users.push({
+        id: doc.id,
+        name: userData.name,
+        mobile: userData.mobile,
+        room: userData.room,
+        previousAddress: userData.previousAddress,
+        RoomRent: userData.RoomRent,
+        email: userData.email, // ✅ Ensure email is stored in Firestore
+      });
+    });
+
+    // ✅ If no users found, throw an error
+    if (users.length === 0) {
+      throw new Error("No tenants found for the given email.");
+    }
+
+    console.log(`Found tenants: ${JSON.stringify(users)}`);
     
-   })
- 
-res.render("view_tenent",{users:users})
-  }catch(error){
-    console.log(error);
-    res.redirect("view_tenent_error")
+    // Render the view with filtered users
+    res.render("view_tenent", { users });
+  } catch (error) {
+    console.error("Error fetching tenants:", error.message);
+
+    res.redirect('/view_tenent_error?email=' + encodeURIComponent(userEmail)); // ✅ userEmail is now accessible
   }
-  // res.render("view_tenent")
-})
+});
+
+
+
 app.get("/view_tenent_error",(req,res)=>{
-  res.render("view_tenent_error")
+  const userEmail = req.query.email || "guest@example.com"; // Get email from URL
+    console.log(userEmail)
+  res.redirect('/addTenant?email=' + encodeURIComponent(userEmail))
 })
 app.get('/edit_tenent/:userId', async (req, res) => {
   const userId = req.params.userId;
