@@ -25,16 +25,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Route to display the add user form
-app.get("/",(req,res)=>{
-  res.render("login")
-})
-
-app.get("/login",(req,res)=>{
-  res.render("login")
-})
-app.get("/login", (req, res) => {
-  res.render("login");
+app.get("/",(req, res) => {
+   res.render("login")
 });
+
+
+
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -65,6 +61,7 @@ app.post("/login", async (req, res) => {
     return res.redirect("/login?error=Internal server error.");
   }
 });
+
 app.get("/signup", (req, res) => {
   res.render("signup");
 });
@@ -81,7 +78,7 @@ app.post("/signup", async (req, res) => {
     const userDoc = await LoginUsers.doc(email).get();
     if (userDoc.exists) {
       console.log("❌ User already exists! Redirecting to login...");
-      return res.redirect("/login?error=User already exists! Please log in.");
+      return res.redirect("/"); // ✅ Return here to prevent further execution
     }
 
     // Save user data in Firestore
@@ -93,16 +90,13 @@ app.post("/signup", async (req, res) => {
     });
 
     console.log(`✅ New user registered: ${email}`);
-
-    const newPrice = 1;
-    const tenent_count = 1;
-
-    return res.render("home", { userEmail: email, newPrice, tenent_count });
+    return res.redirect("/");
   } catch (error) {
     console.error("Signup error:", error.message);
     return res.redirect("/signup?error=Internal server error.");
   }
 });
+
 
 
 app.get("/add", (req, res) => {
@@ -196,6 +190,7 @@ console.log("month reading",data.month_reading)
 console.log("bill date",data.bill_date)
 console.log("current reading",data.current_reading)
 console.log("previous reading",data.previous_reading)
+res.redirect("/Tenent_bill_history/"+data.tenent_id);
 });
 
 app.get("/view_tenent", async (req, res) => {
@@ -226,7 +221,7 @@ app.get("/view_tenent", async (req, res) => {
       throw new Error("No tenants found for the given email.");
     }
 
-    console.log(`Found tenants: ${JSON.stringify(users)}`);
+    // console.log(`Found tenants: ${JSON.stringify(users)}`);
     
     // Render the view with filtered users
     res.render("view_tenent", { users });
@@ -238,12 +233,16 @@ app.get("/view_tenent", async (req, res) => {
 });
 
 
-
 app.get("/view_tenent_error",(req,res)=>{
   const userEmail = req.query.email || "guest@example.com"; // Get email from URL
     console.log(userEmail)
-  res.redirect('/addTenant?email=' + encodeURIComponent(userEmail))
+  res.render("view_tenent_error",{userEmail:userEmail})
 })
+// app.get("/view_tenent_error",(req,res)=>{
+//   const userEmail = req.query.email || "guest@example.com"; // Get email from URL
+//     console.log(userEmail)
+//   res.redirect('/addTenant?email=' + encodeURIComponent(userEmail))
+// })
 app.get('/edit_tenent/:userId', async (req, res) => {
   const userId = req.params.userId;
   const userdta=await Tenants.doc(userId).get();
@@ -261,25 +260,33 @@ console.log(name,mobile,previousAddress,RoomRent)
 await Tenants.doc(userId).update({name,mobile,previousAddress,RoomRent})
 res.redirect("/view_tenent")
 })
-app.get("/Tenent_bill_history/:id",async(req,res)=>{
-  try{
-    const userId = req.params.id;
-    console.log(userId)
-    console.log("hi")
-res.render("Tenent_bill_history")
+app.get("/Tenent_bill_history/:id", async (req, res) => {
+  try {
+    const tenantId = req.params.id;
+    console.log("Searching for bill history for Tenant ID:", tenantId);
 
-  }catch(error){
-    console.log(error)
-    res.render("Tenent_bill_history_error",{userId:userId})
+    // Query Firestore for all bill history records with the specified tenantId
+    const historySnapshot = await Tenants_bill_history.where("tenent_id", "==", tenantId).get();
+    const billHistory = [];
+
+    historySnapshot.forEach((doc) => {
+      billHistory.push({ id: doc.id, ...doc.data() });
+    });
+
+    console.log("Bill History:", billHistory);
+
+    if (billHistory.length === 0) {
+      console.log("No bill history found for Tenant ID:", tenantId);
+      return res.render("Tenent_bill_history_error", { userId: tenantId });
+    }
+
+    res.render("Tenent_bill_history", { history: billHistory });
+  } catch (error) {
+    console.error("Error fetching bill history:", error);
+    res.render("Tenent_bill_history_error", { userId: req.params.id });
   }
- 
-})
-app.get("/Tenent_bill_history_error/:id",(req,res)=>{
-  const userId = req.params.id;
-  console.log(userId)
-  console.log("bye")
-  res.render("Tenent_bill_history_error",{userId:userId})
-})
+});
+
 app.get("/users", async (req, res) => {
   try {
     const usersSnapshot = await Users.get(); // Fetch all users from Firestore
@@ -316,6 +323,8 @@ app.post("/add-user", async (req, res) => {
         res.status(500).send("Error adding user");
     }
 });
+ 
+
 
 app.get('/edit-user/:userId', async (req, res) => {
   try {
@@ -363,6 +372,27 @@ app.post('/delete-user/:userId', async (req, res) => {
   }
 });
 // Start the server
+app.get("/history",async(req,res)=>{
+  
+   
+
+    const billHistorySnapshot = await Tenants_bill_history.get();
+
+const billHistory = [];
+billHistorySnapshot.forEach((doc) => {
+    billHistory.push({
+        id: doc.id, // Document ID
+        ...doc.data() // Spread to get all fields
+    });
+});
+
+console.log(billHistory);
+
+    
+});
+
+    
+
 const Port = process.env.PORT || 8000
 app.listen(Port, () => {
     console.log(`Server is running on http://localhost:${Port}`);
