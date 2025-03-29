@@ -2,264 +2,263 @@
 <html lang="en">
 
 <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Tenant Details</title>
-      <link rel="stylesheet" href="CSS/header.css">
-      <link rel="stylesheet" href="CSS/detail.css">
-<style>
-      /* Reset and Basic Styling */
-* {
-  box-sizing: border-box;
-}
-
-/* General reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f3f4f6;
-  color: #333;
-}
-
-/* Container */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-}
-
-/* Header */
-.header {
-  background-color: #ffffff;
-  padding: 1rem 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tenant Details</title>
+<link rel="stylesheet" href="CSS/header.css">
+  <style>
+    /* Main Container */
+    .header {
+    background: #2C3E50;
+    color: white;
+    padding: 10px 20px;
 }
 
 .header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .logo {
-  display: flex;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: bold;
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .logo .icon {
-  width: 32px;
-  height: 32px;
-  background-color: #4f46e5;
-  border-radius: 4px;
-  margin-right: 0.5rem;
+    width: 30px;
+    height: 30px;
+    background-size: contain;
+    margin-right: 8px;
 }
 
 .profile-button {
-  display: flex;
-  align-items: center;
-  background-color: #4f46e5;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+    background: #3498DB;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-.profile-button .icon {
-  width: 16px;
-  height: 16px;
-  background-color: #fff;
-  margin-right: 0.5rem;
+.profile-button:hover {
+    background: #2980B9;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f6f9;
-  margin: 0;
-  padding: 20px;
-  color: #333;
+.menu-toggle {
+    display: none; /* Hidden by default, shown on small screens */
+    flex-direction: column;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 5px;
 }
 
-.containers {
-  max-width: 600px;
-  margin: auto;
-  margin-top: 10px;
+.menu-toggle .bar {
+    width: 25px;
+    height: 3px;
+    background: white;
+    margin: 4px 0;
 }
 
-/* Card Styling */
-.card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-  overflow: hidden;
-  transition: transform 0.3s, box-shadow 0.3s;
-  margin-bottom: 20px;
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .profile-button {
+        font-size: 0.9rem;
+        padding: 6px 12px;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
-}
+    .main-content {
+      max-width: 500px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+    }
 
-/* Card Header */
-.card-header {
-  background-color: #007bff;
-  color: #ffffff;
-  padding: 16px;
-  text-align: center;
-  position: relative;
-}
+    /* Card Style */
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
 
-.card-header h2 {
-  font-size: 1.5em;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
+    /* Card Header */
+    .card-header {
+      background: linear-gradient(135deg, #0056b3, #003d80);
+      color: white;
+      padding: 0.6rem;
+      font-size: 1.2rem;
+      text-align: center;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
 
-/* Icon Style in Header */
-.card-header h2 i {
-  font-size: 1.2em;
-}
+    /* Card Content */
+    .card-content {
+      padding: 0.8rem;
+    }
 
-/* Header Underline */
-.card-header::after {
-  content: "";
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  height: 2px;
-  background-color: #ffffff;
-  opacity: 0.7;
-  border-radius: 4px;
-}
+    /* Info Grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
 
-/* Card Content */
-.card-content {
-  padding: 20px;
-}
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      background: #f9f9f9;
+      padding: 3px;
+      border-radius: 5px;
+    }
 
-/* Grid Layout for Info Items */
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
-}
+    label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #333;
+      text-transform: uppercase;
+    }
 
-.info-item label {
-  font-size: 0.85em;
-  color: #666;
-  font-weight: 500;
-  margin-bottom: 4px;
-}
+    .info-value {
+      font-size: 0.9rem;
+      color: #222;
+      font-weight: 500;
+      padding-top: 2px;
+    }
 
-.info-value {
-  font-size: 1.1em;
-  font-weight: 600;
-  color: #333;
-  margin-top: 4px;
-}
+    /* Action Buttons */
+    .actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 1rem;
+    }
 
-/* Action Buttons */
-.actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-  justify-content: center;
-}
+    .btn {
+      flex: 1;
+      text-align: center;
+      padding: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: white;
+      text-transform: uppercase;
+    }
 
-.btn {
-  padding: 10px 18px;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #ffffff;
-  font-size: 0.95em;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
+    /* Button Colors */
+    #add-bill-btn {
+      background: #2C3E50;
+    }
 
-.btn:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
+    #view-history-btn {
+      background: #2C3E50;
+    }
 
-.btn.outline {
-  background: none;
-  border: 2px solid #007bff;
-  color: #007bff;
-}
+    #edit-info-btn {
+      background: #2C3E50;
+    }
 
-.btn.outline:hover {
-  background-color: #007bff;
-  color: white;
-}
+    .btn:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
 
-</style>
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .main-content {
+        padding: 0.8rem;
+      }
 
+      .card-header {
+        font-size: 1.1rem;
+      }
+
+      .btn {
+        font-size: 0.8rem;
+        padding: 7px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-      <%- include('partials/header') %>
-      <div class="containers">
-            <div class="card">
-                  <div class="card-header">
-                        <h2><i class="fas fa-user"></i> Tenant Details</h2>
-                  </div>
-                  <div class="card-content">
-                        <div class="info-grid">
-                              <div class="info-item">
-                                    <label>Room No</label>
-                                    <p class="info-value"><%=userData.room%></p>
-                              </div>
-                              <div class="info-item">
-                                    <label>Tenant Name</label>
-                                    <p class="info-value"><%=userData.name%></p>
-                              </div>
-                              <div class="info-item">
-                                    <label>Phone Number</label>
-                                    <p class="info-value"><%=userData.mobile%></p>
-                              </div>
-                              <div class="info-item">
-                                    <label>Previous Address</label>
-                                    <p class="info-value"><%=userData.previousAddress%></p>
-                              </div>
-                              <div class="info-item">
-                                    <label>Room Rent</label>
-                                    <p class="info-value">
-                                          <%=userData.RoomRent%>
-                                    </p>
-                              </div>
-                        </div>
-                        <div class="actions">
-                            <a href="/add_new_bill/<%= userId %>"><button class="btn" id="add-bill-btn">Add Bill</button></a>  
-                              <a href="/Tenent_bill_history/<%= userId %>"><button class="btn outline" id="view-history-btn">View History</button></a>
-                        
-                              <a href="/edit_tenent/<%=userId%>">
-                              <button class="btn outline" id="view-history-btn">Edit Info</button>
-                            </a>
-
-
-                             
-                        </div>
-                  </div>
+  <%- include('partials/header') %>
+    <main class="container main-content">
+      <div class="card">
+        <div class="card-header">
+          <h2><i class="fas fa-user"></i> Tenant Details</h2>
+        </div>
+        <div class="card-content">
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Room No</label>
+              <p class="info-value">
+                <%=userData.room%>
+              </p>
             </div>
+            <div class="info-item">
+              <label>Tenant Name</label>
+              <p class="info-value">
+                <%=userData.name%>
+              </p>
+            </div>
+            <div class="info-item">
+              <label>Phone Number</label>
+              <p class="info-value">
+                <%=userData.mobile%>
+              </p>
+            </div>
+            <div class="info-item">
+              <label>Previous Address</label>
+              <p class="info-value">
+                <%=userData.previousAddress%>
+              </p>
+            </div>
+            <div class="info-item">
+              <label>Room Rent</label>
+              <p class="info-value">
+                <%=userData.RoomRent%>
+              </p>
+            </div>
+          </div>
+          <div class="actions">
+            <a href="/add_new_bill/<%= userId %>">
+              <button class="btn" id="add-bill-btn">Add Bill</button>
+            </a>
+            <a href="/Tenent_bill_history/<%= userId %>">
+              <button class="btn" id="view-history-btn">History</button>
+            </a>
+            <a href="/edit_tenent/<%=userId%>">
+              <button class="btn" id="edit-info-btn">Edit Info</button>
+            </a>
+          </div>
+        </div>
       </div>
-
-    
+    </main>
 </body>
 
 </html>

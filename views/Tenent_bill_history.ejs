@@ -6,50 +6,192 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Tenant Management Dashboard</title>
       <link rel="stylesheet" href="/CSS/header.css">
-      <link rel="stylesheet" href="/CSS/history.css">
-      
+      <style>
+            /* General Styles */
+body {
+    background-color: #f4f4f4; /* Light background */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333; /* Ensure text is visible */
+}
 
+/* Overlay to dim background when dialog is open */
+.overlay {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 999;
+}
+
+/* Dialog Box */
+.dialog {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 700px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-in-out;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+/* Dialog Content */
+.dialog-content {
+    position: relative;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Close Button */
+.dialog-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+}
+
+.dialog-close:hover {
+    color: #222;
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+}
+
+/* Table Header */
+thead {
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    color: #333;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 14px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn.ghost {
+    background-color: #28a745;
+    color: white;
+    transition: 0.3s ease;
+}
+
+.btn.ghost:hover {
+    background-color: #218838;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 600px) {
+    .dialog {
+        width: 90%;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+      </style>
+      
 </head>
 
 <body>
+
       <%- include('partials/header') %>
-      <div class="dialog" id="view-history-dialog">
-            <div class="dialog-content">
-                  <h3>Bill History</h3>
-                  <table>
-                        <thead>
-                              <tr>
-                                    <th>Date</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                              </tr>
-                        </thead>
-                        <tbody>
-                              <tr>
-                                    <td>2023-05-01</td>
-                                    <td>$150</td>
-                                    <td>Paid</td>
-                                    <td><button class="btn ghost">Edit</button></td>
-                              </tr>
-                              <tr>
-                                    <td>2023-06-01</td>
-                                    <td>$150</td>
-                                    <td>Paid</td>
-                                    <td><button class="btn ghost">Edit</button></td>
-                              </tr>
-                              <tr>
-                                    <td>2023-07-01</td>
-                                    <td>$160</td>
-                                    <td>Unpaid</td>
-                                    <td><button class="btn ghost">Edit</button></td>
-                              </tr>
-                        </tbody>
-                  </table>
+
+          
+            <div class="dialog" id="view-history-dialog">
+                  <div class="dialog-content">
+                        <span class="dialog-close">&times;</span>
+                        <h3>Bill History</h3>
+                        <table>
+                              <thead>
+                                    <tr>
+                                          <th>Date</th>
+                                          
+                                          <th>Month Reading</th>
+                                          <th>Amount</th>
+                                          <th>Action</th>
+                                    </tr>
+                              </thead>
+                              <tbody>
+                                    <tr>
+                                          <td>2023-05-01</td>
+                                         
+                                          <td>150</td>
+                                          <td>$150</td>
+                                          <td><button class="btn ghost">Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                          <td>2023-06-01</td>
+                                          
+                                          <td>150</td>
+                                          <td>$150</td>
+                                          <td><button class="btn ghost">Edit</button></td>
+                                    </tr>
+                                    <tr>
+                                          <td>2023-07-01</td>
+                                          
+                                          <td>200</td>
+                                          <td>$160</td>
+                                          <td><button class="btn ghost">Edit</button></td>
+                                    </tr>
+                              </tbody>
+                        </table>
+                  </div>
             </div>
-      </div>
 
            
+
 </body>
 
 </html>

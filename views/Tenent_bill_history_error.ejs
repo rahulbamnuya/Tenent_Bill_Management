@@ -4,20 +4,57 @@
 <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Tenant Management Dashboard</title>
-      <link rel="stylesheet" href="CSS/header.css">
-      <link rel="stylesheet" href="CSS/history.css">
+      <title>Tenant Bill History</title>
+      <link rel="stylesheet" href="/CSS/header.css">
+      <style>
+            .dialog-content {
+                  background: #fff;
+                  padding: 25px;
+                  border-radius: 10px;
+                  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+                  text-align: center;
+                  max-width: 400px;
+                  margin: 50px auto;
+            }
 
+            h2 {
+                  color: #333;
+                  margin-bottom: 15px;
+            }
+
+            p {
+                  color: #666;
+                  font-size: 16px;
+            }
+
+            .btn {
+                  display: inline-block;
+                  padding: 12px 20px;
+                  font-size: 16px;
+                  background-color: #28a745;
+                  color: white;
+                  border: none;
+                  border-radius: 5px;
+                  cursor: pointer;
+                  text-decoration: none;
+                  transition: background 0.3s ease;
+                  margin-top: 20px;
+            }
+
+            .btn:hover {
+                  background-color: #218838;
+            }
+      </style>
 </head>
 
 <body>
       <%- include('partials/header') %>
-            <div class="dialog" id="view-history-dialog">
-                 <h1>Nothing To show </h1>
-                 <a href="/add_new_bill/<%=userId%>"><button>Add New Bill</button></a>
+
+            <div class="dialog-content">
+                  <h2>No Billing Records Found</h2>
+                  <p>It looks like there are no bills recorded for this tenant yet.</p>
+                  <a href="/add_new_bill/<%= userId %>" class="btn">Add a New Bill</a>
             </div>
-
-
 </body>
 
 </html>

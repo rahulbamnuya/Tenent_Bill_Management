@@ -7,6 +7,8 @@
       <title>Tenant List</title>
       <link rel="stylesheet" href="CSS/header.css">
       <link rel="stylesheet" href="CSS/view_tenent.css">
+      
+   
 </head>
 
 <body>
@@ -14,34 +16,23 @@
       
 
       <main class="container main-content">
-            <h1>Tenant List</h1>
-            <div class="search-bar">
-                  <input type="text" placeholder="Search tenants..." class="search-input">
-                  <select class="status-filter">
-                        <option value="">All Statuses</option>
-                        <option value="Active">Active</option>
-                        <option value="Moving Out">Moving Out</option>
-                        <option value="Eviction Notice">Eviction Notice</option>
-                        <option value="New Tenant">New Tenant</option>
-                        <option value="Late Payment">Late Payment</option>
-                  </select>
-            </div>
+            
 
             <div class="tenant-list">
                   <div class="tenant-list-header">
                         <span>Room No.</span>
                         <span>Name</span>
-                        <span>Monthly Amount</span>
+                       
                         
-                        <span>Status</span>
+                        <span>Detail</span>
                   </div>
 
             <% users.forEach(user=> { %>
             <a href="/detail/<%=user.id%>">  <div class="tenant-row">
                         <span><%=user.room %></span>
                         <span><%=user.name %></span>
-                        <span>$ <%=user.RoomRent %></span>
-                        <span class="status eviction">Eviction Notice</span>
+                        
+                        <span class="status eviction">See </span>
                   </div>
              </a>
             <% }); %>

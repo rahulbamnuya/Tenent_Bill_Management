@@ -7,6 +7,8 @@
       <title>Tenant Management Dashboard</title>
       <link rel="stylesheet" href="CSS/header.css">
       <link rel="stylesheet" href="CSS/home.css">
+      <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+      
 </head>
 
 <body>
@@ -14,42 +16,36 @@
 
             <main class="container main-content">
                   <div class="grid">
+                        <!-- Total Tenants Card -->
                         <div class="card">
                               <div class="card-header">
                                     <span>Total Tenants</span>
-                                    <div class="icon user-icon"></div>
+                                    <i class="fas fa-user user-icon"></i>
                               </div>
-                              <div class="card-value"><%=tenent_count%></div>
-                              <p class="card-subtext">+2 from last month</p>
+                              <div class="card-value">
+                                    <%= tenent_count %>
+                              </div>
+                             
                         </div>
+
+                        <!-- Bill Unit Card -->
                         <div class="card">
                               <div class="card-header">
                                     <span>Bill Unit</span>
-                                    <div class="icon lease-icon"></div>
-                                    <!-- Edit Button -->
+                                    <i class="fas fa-file-invoice-dollar lease-icon"></i>
                                     <button class="edit-btn" onclick="editBillUnit()">Edit</button>
                               </div>
-                              <div class="card-value" id="bill-unit-value"><%= newPrice %></div>
-                              <p class="card-subtext" id="unit-price">$<%= newPrice %> per unit</p>
 
-                              <!-- Edit Form (Initially Hidden) -->
-                              <form action="/edit_bill_amount" id="edit-form" style="display: none;" method="post">
-                                    <input type="number" id="new-price" name="newPrice" placeholder="Enter new price" />
-                                          <button>Save</button>     
-                                    <button onclick="cancelEdit()">Cancel</button>
-                              </form>
-                        </div>
-                        <div class="card">
-                              <div class="card-header">
-                                    <span>Total Revenue</span>
-                                    <div class="icon revenue-icon"></div>
+                              <div class="card-value" id="bill-unit-value">Rs.<%= newPrice %>
                               </div>
-                              <div class="card-value">$24,500</div>
-                              <p class="card-subtext">+5% from last month</p>
+                              <p class="card-subtext" id="unit-price">Rs.<%= newPrice %> per unit</p>
+
+                              
                         </div>
                   </div>
 
-                  <div class="actions">
+                  <!-- Action Buttons -->
+                  <div class="actions" style="margin-top: 20px;">
                         <a href="/addTenant?email=<%= userEmail %>">
                               <button class="btn primary">+ Add New Tenant</button>
                         </a>
@@ -57,46 +53,9 @@
                               <button class="btn secondary">View All Tenants</button>
                         </a>
                   </div>
-
             </main>
 
-            <script>
-                  // Function to display the edit form
-                  function editBillUnit() {
-                        // Hide the displayed unit price and show the input form
-                        document.getElementById('bill-unit-value').style.display = 'none';
-                        document.getElementById('unit-price').style.display = 'none';
-                        document.getElementById('edit-form').style.display = 'flex';
-
-                        // Pre-fill the input field with the current price (optional)
-                        const currentPrice = document.getElementById('unit-price').innerText.replace('$', '');
-                        document.getElementById('new-price').value = currentPrice;
-                  }
-
-                  // Function to save the new bill unit price
-                  function saveBillUnit() {
-                        // Get the new price from the input field
-                        const newPrice = document.getElementById('new-price').value;
-console.log(newPrice )
-                        // Update the displayed value and price
-                        document.getElementById('bill-unit-value').innerText = '10';  // This can be updated with dynamic value
-                        document.getElementById('unit-price').innerText = `$${newPrice} per unit`;
-
-                        // Hide the edit form and show the updated values
-                        document.getElementById('edit-form').style.display = 'none';
-                        document.getElementById('bill-unit-value').style.display = 'block';
-                        document.getElementById('unit-price').style.display = 'block';
-
-                  }
-
-                  // Function to cancel the edit
-                  function cancelEdit() {
-                        // Hide the edit form and revert back to the original values
-                        document.getElementById('edit-form').style.display = 'none';
-                        document.getElementById('bill-unit-value').style.display = 'block';
-                        document.getElementById('unit-price').style.display = 'block';
-                  }
-            </script>
+                 
 </body>
 
 </html>
