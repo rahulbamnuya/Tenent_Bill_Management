@@ -1,0 +1,54 @@
+
+/* Main Container */
+.main-content {
+  max-width: 600px;
+  margin-top: 50px;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+/* Title */
+h1 {
+  font-size: 1.8rem;
+  color: #007bff;
+  margin-bottom: 1.5rem;
+}
+
+/* Add Tenant Button */
+.add-tenant-btn {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  text-transform: uppercase;
+}
+
+.add-tenant-btn:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Link Styling */
+#addTenantLink {
+  text-decoration: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content {
+    max-width: 90%;
+    padding: 1.5rem;
+  }
+  .add-tenant-btn {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+}

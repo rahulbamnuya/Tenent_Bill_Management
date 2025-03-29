@@ -1,115 +1,100 @@
 
+/* Overlay to dim background when dialog is open */
 
-/* Dialog Container */
-.dialog {
-  max-width: 600px;
-  margin: auto;
-  margin-top: 10px;
-  padding: 10px;
-}
+/* Dialog Box */
 
+
+/* Dialog Content */
 .dialog-content {
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  max-width: 400px;
-  width: 100%;
-  text-align: left;
+    position: relative;
+    padding: 10px;
+    text-align: center;
 }
 
-.dialog-content h3 {
-  margin-top: 0;
-  font-size: 1.5em;
-  color: #333;
+/* Close Button */
+.dialog-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
 }
 
-/* Form Group Styling */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  font-size: 0.9em;
-  color: #555;
-}
-
-.form-group input[type="text"],
-.form-group input[type="date"] {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1em;
-  width: 100%;
+.dialog-close:hover {
+    color: #222;
 }
 
 /* Table Styling */
 table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 16px;
-}
-
-table th,
-table td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-table th {
-  font-weight: bold;
-  color: #007bff;
-}
-
-table td {
-  font-size: 0.9em;
-  color: #555;
-}
-
-/* Responsive Styles */
-@media (max-width: 600px) {
-  /* Dialog Content */
-  .dialog-content {
-    padding: 16px;
-    max-width: 90%;
-    font-size: 0.9em;
-  }
-
-  .dialog-content h3 {
-    font-size: 1.2em;
-  }
-
-  /* Adjust Table Padding */
-  table th,
-  table td {
-    padding: 8px;
-  }
-
-  /* Form Group Input Adjustments */
-  .form-group input[type="text"],
-  .form-group input[type="date"] {
-    font-size: 0.9em;
-    padding: 8px;
-  }
-
-  /* Responsive Layout for Buttons */
-  .btn, .btn.outline {
     width: 100%;
-    padding: 12px;
-    font-size: 1em;
-  }
-
-  /* Adjusted Layout for Info Grid */
-  .info-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  /* Action Button Adjustments */
-  .actions {
-    flex-direction: column;
-    gap: 10px;
-  }
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #ddd;
 }
+
+/* Table Header */
+thead {
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+}
+
+th, td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    color: #333;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Buttons */
+.btn {
+    padding: 8px 14px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn.ghost {
+    background-color: #28a745;
+    color: white;
+    transition: 0.3s ease;
+}
+
+.btn.ghost:hover {
+    background-color: #218838;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -60%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 600px) {
+    .dialog {
+        width: 90%;
+    }
+
+    th, td {
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+    
