@@ -2,4 +2,4 @@
 # clone it
 # npm install
 # node index.js
-# http://localhost:8000/login
+# http://localhost:8000/
