@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Details</title>
+    <link rel="stylesheet" href="/CSS/header.css">
+    <style>
+       
+        .bill-container {
+            width: 90%;
+            max-width: 500px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .bill-header {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #007BFF;
+        }
+
+        .bill-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .bill-item:last-child {
+            border-bottom: none;
+        }
+
+        .bill-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .bill-value {
+            color: #333;
+        }
+
+        .btn-primary {
+            display: block;
+            margin-top: 20px;
+            padding: 12px;
+            width: 100%;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+    <div class="bill-container">
+        <div class="bill-header">Bill Details</div>
+
+        <div class="bill-details">
+            <div class="bill-item">
+                <span class="bill-label">Date:</span>
+                <span class="bill-value"><%= bill.bill_date %></span>
+            </div>
+
+            <div class="bill-item">
+                <span class="bill-label">Month Reading:</span>
+                <span class="bill-value"><%= bill.month_reading %></span>
+            </div>
+            <div class="bill-item">
+                <span class="bill-label">Current Reading:</span>
+                <span class="bill-value"><%= bill.current_reading %></span>
+            </div>
+            <div class="bill-item">
+                <span class="bill-label">Previous Reading:</span>
+                <span class="bill-value"><%= bill.previous_reading %></span>
+            </div>
+
+            
+
+
+            <div class="bill-item">
+                <span class="bill-label">Bill Amount:</span>
+                <span class="bill-value">Rs. <%= bill.bill_amount %></span>
+            </div>
+        </div>
+
+        <a href="/Tenent_bill_history/<%= tenant_id %>" class="btn-primary">Go Back</a>
+    </div>
+</body>
+
+</html>

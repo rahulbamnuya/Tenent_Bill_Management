@@ -246,16 +246,21 @@
             </div>
           </div>
           <div class="actions">
-            <a href="/add_new_bill/<%= userId %>">
-              <button class="btn" id="add-bill-btn">Add Bill</button>
-            </a>
-            <a href="/Tenent_bill_history/<%= userId %>">
-              <button class="btn" id="view-history-btn">History</button>
-            </a>
-            <a href="/edit_tenent/<%=userId%>">
-              <button class="btn" id="edit-info-btn">Edit Info</button>
-            </a>
-          </div>
+  <a href="/add_new_bill/<%= userId %>">
+    <button class="btn" id="add-bill-btn">Add Bill</button>
+  </a>
+  <a href="/Tenent_bill_history/<%= userId %>">
+    <button class="btn" id="view-history-btn">History</button>
+  </a>
+  <a href="/edit_tenent/<%= userId %>">
+    <button class="btn" id="edit-info-btn">Edit Info</button>
+  </a>
+  <a href="/view_tenent?email=<%= userData.userEmail %>">
+    <button class="btn" id="back-btn" style="background: #2C3E50;">Back</button>
+  </a>
+  
+</div>
+
         </div>
       </div>
     </main>

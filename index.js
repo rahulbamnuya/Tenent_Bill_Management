@@ -48,10 +48,7 @@ app.post("/login", async (req, res) => {
       console.log("✅ User found! Redirecting to home...");
       console.log(`User email id is:", ${email}`);
 
-      const newPrice = 1;
-      const tenent_count = 1;
-
-      return res.render("home", { userEmail: email, newPrice, tenent_count });
+      return res.redirect(`/home?email=${email}`);
     } else {
       console.log("❌ User not found! Redirecting to signup...");
       return res.redirect("/signup?error=User not found! Please sign up.");
@@ -61,6 +58,31 @@ app.post("/login", async (req, res) => {
     return res.redirect("/login?error=Internal server error.");
   }
 });
+app.get("/home", async (req, res) => {
+  const userEmail = req.query.email;
+
+  if (!userEmail) {
+    return res.redirect("/login?error=Unauthorized access.");
+  }
+
+  try {
+    // Fetch tenants from the database for the logged-in user
+    const usersSnapshot = await Tenants.where("userEmail", "==", userEmail).get();
+    
+    // Count the number of tenants
+    const tenent_count = usersSnapshot.size;
+
+    // Dummy value for price (Replace with actual calculation if needed)
+    const newPrice = 10;
+
+    res.render("home", { userEmail, newPrice, tenent_count });
+  } catch (error) {
+    console.error("Error loading home page:", error.message);
+    res.redirect("/login?error=Failed to load home page.");
+  }
+});
+
+
 
 app.get("/signup", (req, res) => {
   res.render("signup");
@@ -135,6 +157,7 @@ app.get("/detail/:userId", async (req, res) => {
 
         const userData = user.data();
         console.log(userId);
+        console.log(userData)
         res.render("detail", { userId: userId, userData: userData });
     } catch (err) {
         console.error("Error fetching user data:", err);
@@ -194,7 +217,7 @@ res.redirect("/Tenent_bill_history/"+data.tenent_id);
 });
 
 app.get("/view_tenent", async (req, res) => {
-  const userEmail = req.query.email || "guest@example.com"; // ✅ Declare userEmail outside try
+  const userEmail = req.query.email ; // ✅ Declare userEmail outside try
 
   try {
     console.log(`Searching for tenants with email: ${userEmail}`);
@@ -224,7 +247,7 @@ app.get("/view_tenent", async (req, res) => {
     // console.log(`Found tenants: ${JSON.stringify(users)}`);
     
     // Render the view with filtered users
-    res.render("view_tenent", { users });
+    res.render("view_tenent", { users,userEmail: userEmail });
   } catch (error) {
     console.error("Error fetching tenants:", error.message);
 
@@ -252,14 +275,28 @@ console.log(userId)
   res.render('edit_tenent', { userId: userId ,userData:userData});
 });
 
-app.post("/edit_tenent/:userId",async (req,res)=>{
-  
- const userId = req.params.userId;
-const{name,mobile,previousAddress,RoomRent}=req.body;
-console.log(name,mobile,previousAddress,RoomRent)
-await Tenants.doc(userId).update({name,mobile,previousAddress,RoomRent})
-res.redirect("/view_tenent")
-})
+app.post("/edit_tenent/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const userEmail = req.query.email; // ✅ Declare userEmail outside try block
+
+  const { name, mobile, previousAddress, RoomRent } = req.body;
+
+  try {
+      console.log("Updating tenant:", { name, mobile, previousAddress, RoomRent });
+
+      // Update the tenant's details
+      await Tenants.doc(userId).update({ name, mobile, previousAddress, RoomRent });
+
+      // Redirect to the tenant's view page with their ID and email
+      res.redirect(`/detail/${userId}`);
+  } catch (error) {
+      console.error("Error updating tenant:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+
 app.get("/Tenent_bill_history/:id", async (req, res) => {
   try {
     const tenantId = req.params.id;
@@ -274,7 +311,7 @@ app.get("/Tenent_bill_history/:id", async (req, res) => {
     });
 
     console.log("Bill History:", billHistory);
-
+    
     if (billHistory.length === 0) {
       console.log("No bill history found for Tenant ID:", tenantId);
       return res.render("Tenent_bill_history_error", { userId: tenantId });
@@ -286,6 +323,30 @@ app.get("/Tenent_bill_history/:id", async (req, res) => {
     res.render("Tenent_bill_history_error", { userId: req.params.id });
   }
 });
+// Route to fetch and display bill details
+app.get("/history/details/:tenant_id/:bill_id", async (req, res) => {
+  const { tenant_id, bill_id } = req.params;
+
+  try {
+      const doc = await Tenants_bill_history.doc(bill_id).get();
+
+      if (!doc.exists) {
+          return res.status(404).json({ message: "Bill history not found." });
+      }
+
+      res.render("history-details", { 
+          bill: { id: bill_id, ...doc.data() }, // Explicitly passing bill_id
+          tenant_id 
+      });
+  } catch (error) {
+      console.error("Error fetching bill details:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
+
+
+
 
 app.get("/users", async (req, res) => {
   try {

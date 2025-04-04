@@ -1,43 +1,66 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Tenant List</title>
       <link rel="stylesheet" href="CSS/header.css">
       <link rel="stylesheet" href="CSS/view_tenent.css">
-      
-   
+      <style>
+            .back-button {
+                  display: inline-block;
+                  margin-bottom: 15px;
+                  padding: 10px 20px;
+                  font-size: 16px;
+                  font-weight: bold;
+                  color: #fff;
+                  background-color: #2C3E50;
+                  border: none;
+                  border-radius: 8px;
+                  cursor: pointer;
+                  transition: 0.3s ease;
+                  text-align: center;
+                  text-decoration: none;
+                  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .back-button:hover {
+                  background-color: #0056b3;
+                  transform: scale(1.05);
+            }
+
+            .back-button:active {
+                  transform: scale(0.98);
+            }
+      </style>
 </head>
 
 <body>
       <%- include('partials/header') %>
-      
 
       <main class="container main-content">
-            
+            <button onclick="goBack()" class="back-button">🔙 Back</button>
 
             <div class="tenant-list">
                   <div class="tenant-list-header">
                         <span>Room No.</span>
                         <span>Name</span>
-                       
-                        
                         <span>Detail</span>
                   </div>
 
-            <% users.forEach(user=> { %>
-            <a href="/detail/<%=user.id%>">  <div class="tenant-row">
-                        <span><%=user.room %></span>
-                        <span><%=user.name %></span>
-                        
-                        <span class="status eviction">See </span>
-                  </div>
-             </a>
-            <% }); %>
+                  <% users.forEach(user => { %>
+                  <a href="/detail/<%= user.id %>">
+                        <div class="tenant-row">
+                              <span><%= user.room %></span>
+                              <span><%= user.name %></span>
+                              <span class="status eviction">See</span>
+                        </div>
+                  </a>
+                  <% }); %>
             </div>
       </main>
-</body>
 
-</html>
+      <script>
+            function goBack() {
+                  window.location.href = "/home?email=<%= userEmail %>";
+            }
+      </script>
+</body>
