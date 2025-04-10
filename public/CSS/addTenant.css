@@ -1,4 +1,3 @@
-
 /* Centering the Container */
 .containers {
     max-width: 500px;
@@ -9,8 +8,23 @@
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease-in-out;
+
+    /* Animation on Load - Slide in from left */
+    opacity: 0;
+    transform: translateX(-100px); /* Now it starts from left */
+    animation: slideInFromLeft 0.6s ease-out forwards;
 }
 
+@keyframes slideInFromLeft {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+
+/* Container Hover Effect */
 .containers:hover {
     transform: translateY(-5px);
 }
@@ -22,11 +36,33 @@
     color: #222;
     margin-bottom: 20px;
     font-weight: 700;
+
+    /* Animation */
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: fadeInTitle 0.6s ease-out forwards;
+    animation-delay: 0.2s;
 }
 
 /* Form Styling */
 .form-group {
     margin-bottom: 15px;
+    opacity: 0;
+    animation: fadeInField 0.5s forwards;
+}
+
+/* Staggered Animation Delay for Form Fields */
+.form-group:nth-child(2) {
+    animation-delay: 0.4s;
+}
+.form-group:nth-child(3) {
+    animation-delay: 0.6s;
+}
+.form-group:nth-child(4) {
+    animation-delay: 0.8s;
+}
+.form-group:nth-child(5) {
+    animation-delay: 1s;
 }
 
 /* Labels */
@@ -75,11 +111,43 @@ input::placeholder {
     transition: 0.3s;
     text-transform: uppercase;
     letter-spacing: 1px;
+
+    /* Animation */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInField 0.5s forwards;
+    animation-delay: 1.2s;
 }
 
 .submit-btn:hover {
     background: linear-gradient(135deg, #0056b3, #003b80);
     transform: scale(1.02);
+}
+
+/* Animations */
+@keyframes fadeSlideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInField {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInTitle {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive Design */

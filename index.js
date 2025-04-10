@@ -23,6 +23,17 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
+const session = require('express-session');
+
+app.use(session({
+  secret: 'qwertyuiop', // 🔐 Session key
+  resave: false,                        // Avoid resaving session if unmodified
+  saveUninitialized: false,             // Don't save empty sessions
+  cookie: {
+    secure: false,                      // Set true only if using HTTPS
+    maxAge: 1000 * 60 * 60 * 1          // 1 hour
+  }
+}));
 
 // Route to display the add user form
 app.get("/",(req, res) => {
@@ -35,8 +46,6 @@ app.get("/",(req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  console.log("User trying to log in:", email);
-
   if (!email || !password) {
     return res.redirect("/login?error=All fields are required!");
   }
@@ -45,25 +54,30 @@ app.post("/login", async (req, res) => {
     const userDoc = await LoginUsers.doc(email).get();
 
     if (userDoc.exists) {
-      console.log("✅ User found! Redirecting to home...");
-      console.log(`User email id is:", ${email}`);
+      // ✅ Save user info in session
+      req.session.user = {
+        email: email,
+        isLoggedIn: true
+      };
 
-      return res.redirect(`/home?email=${email}`);
+      // console.log("✅ User logged in and session started!");
+      return res.redirect("/home");
     } else {
-      console.log("❌ User not found! Redirecting to signup...");
+      // console.log("❌ User not found! Redirecting to signup...");
       return res.redirect("/signup?error=User not found! Please sign up.");
     }
   } catch (error) {
-    console.error("Login error:", error.message);
+    // console.error("Login error:", error.message);
     return res.redirect("/login?error=Internal server error.");
   }
 });
 app.get("/home", async (req, res) => {
-  const userEmail = req.query.email;
-
-  if (!userEmail) {
-    return res.redirect("/login?error=Unauthorized access.");
+  // ✅ Use session to get email, not from query
+  if (!req.session.user || !req.session.user.isLoggedIn) {
+    return res.redirect("/login?error=Please log in first.");
   }
+
+  const userEmail = req.session.user.email;
 
   try {
     // Fetch tenants from the database for the logged-in user
@@ -77,10 +91,11 @@ app.get("/home", async (req, res) => {
 
     res.render("home", { userEmail, newPrice, tenent_count });
   } catch (error) {
-    console.error("Error loading home page:", error.message);
+    // console.error("Error loading home page:", error.message);
     res.redirect("/login?error=Failed to load home page.");
   }
 });
+
 
 
 
@@ -99,7 +114,7 @@ app.post("/signup", async (req, res) => {
     // Check if user already exists
     const userDoc = await LoginUsers.doc(email).get();
     if (userDoc.exists) {
-      console.log("❌ User already exists! Redirecting to login...");
+      // console.log("❌ User already exists! Redirecting to login...");
       return res.redirect("/"); // ✅ Return here to prevent further execution
     }
 
@@ -111,10 +126,10 @@ app.post("/signup", async (req, res) => {
       createdAt: new Date(),
     });
 
-    console.log(`✅ New user registered: ${email}`);
+    // console.log(`✅ New user registered: ${email}`);
     return res.redirect("/");
   } catch (error) {
-    console.error("Signup error:", error.message);
+    // console.error("Signup error:", error.message);
     return res.redirect("/signup?error=Internal server error.");
   }
 });
@@ -129,7 +144,7 @@ app.post("/edit_bill_amount", async (req, res) => {
  
  
   const newPrice = req.body.newPrice; // Access newPrice from req.body
-  console.log(newPrice);
+  // console.log(newPrice);
 
   // Now you have the newPrice value.  Use it to update your data.
   // For example, if you're using a variable to store the bill unit:
@@ -156,25 +171,27 @@ app.get("/detail/:userId", async (req, res) => {
         }
 
         const userData = user.data();
-        console.log(userId);
-        console.log(userData)
+        // console.log(userId);
+        // console.log(userData)
         res.render("detail", { userId: userId, userData: userData });
     } catch (err) {
-        console.error("Error fetching user data:", err);
+        // console.error("Error fetching user data:", err);
         res.status(500).send("Internal Server Error");
     }
 });
 
 ///X
-app.get("/addTenant",(req,res)=>{
-  const userEmail = req.query.email || "guest@example.com"; // Get email from URL
-  console.log(userEmail)
-  res.render("addTenant",{userEmail:userEmail})
-})
+// app.js
+app.get("/addTenant", (req, res) => {
+  const userEmail = req.session.userEmail || "guest@example.com";
+  console.log("Session Email:", userEmail);
+  res.render("addTenant", { userEmail: userEmail });
+});
+
 app.post("/add_new",async (req,res)=>{
    try {
         const { name, mobile, room,previousAddress,RoomRent,userEmail } = req.body; // Get data from the form
-        console.log(name,mobile,room,previousAddress,RoomRent,userEmail)
+        // console.log(name,mobile,room,previousAddress,RoomRent,userEmail)
         const newUserRef = await Tenants.add({name,mobile,room,previousAddress,RoomRent,userEmail})
         console.log(`User added with ID: ${newUserRef.id}`);
         res.redirect('/view_tenent?email=' + encodeURIComponent(userEmail));
@@ -188,41 +205,45 @@ app.post("/add_new",async (req,res)=>{
 ///X
 app.get("/add_new_bill/:id",(req,res)=>{
    const userId = req.params.id;
-   console.log(userId)
+  //  console.log(userId)
   res.render("add_new_bill",{userId:userId})
 })
 app.post("/add_new_bill/:id", async (req,res)=>{
    const userId = req.params.id;
-  console.log("hello")
-   console.log(userId)
+  // console.log("hello")
+  //  console.log(userId)
   const tenent_id=userId;
    const { previous_reading, current_reading,bill_date } = req.body;
    const month_reading=current_reading-previous_reading;
-   console.log("New reading is",month_reading)
+  //  console.log("New reading is",month_reading)
    const bill_amount=10*month_reading;
-   console.log("bill is",bill_amount)
-  console.log(previous_reading, current_reading,bill_date )
+  //  console.log("bill is",bill_amount)
+  // console.log(previous_reading, current_reading,bill_date )
   const bill_add_history=await Tenants_bill_history.add({current_reading,previous_reading,month_reading,bill_amount,bill_date,tenent_id})
 const id=bill_add_history.id;
 const bill_id=await Tenants_bill_history.doc(id).get();
 const data=bill_id.data();
-console.log("BIll id",bill_id.id)
-console.log("tenent id",data.tenent_id)
-console.log("bill amountg",data.bill_amount)
-console.log("month reading",data.month_reading)
-console.log("bill date",data.bill_date)
-console.log("current reading",data.current_reading)
-console.log("previous reading",data.previous_reading)
+// console.log("BIll id",bill_id.id)
+// console.log("tenent id",data.tenent_id)
+// console.log("bill amountg",data.bill_amount)
+// console.log("month reading",data.month_reading)
+// console.log("bill date",data.bill_date)
+// console.log("current reading",data.current_reading)
+// console.log("previous reading",data.previous_reading)
 res.redirect("/Tenent_bill_history/"+data.tenent_id);
 });
 
 app.get("/view_tenent", async (req, res) => {
-  const userEmail = req.query.email ; // ✅ Declare userEmail outside try
+  // 🔒 Check if user is logged in
+  if (!req.session.user || !req.session.user.isLoggedIn) {
+    return res.redirect("/login?error=Please log in first.");
+  }
+
+  const userEmail = req.session.user.email;
 
   try {
-    console.log(`Searching for tenants with email: ${userEmail}`);
+    // console.log(`Searching for tenants with email: ${userEmail}`);
 
-    // Query Firestore for tenants with matching email
     const usersSnapshot = await Tenants.where("userEmail", "==", userEmail).get();
 
     const users = [];
@@ -235,30 +256,30 @@ app.get("/view_tenent", async (req, res) => {
         room: userData.room,
         previousAddress: userData.previousAddress,
         RoomRent: userData.RoomRent,
-        email: userData.email, // ✅ Ensure email is stored in Firestore
+        email: userData.email,
       });
     });
 
-    // ✅ If no users found, throw an error
     if (users.length === 0) {
-      throw new Error("No tenants found for the given email.");
+      // Optional: flash a message or render empty view
+      return res.render("view_tenent", {
+        users: [],
+        userEmail,
+        message: "No tenants found for your account.",
+      });
     }
 
-    // console.log(`Found tenants: ${JSON.stringify(users)}`);
-    
-    // Render the view with filtered users
-    res.render("view_tenent", { users,userEmail: userEmail });
+    res.render("view_tenent", { users, userEmail });
   } catch (error) {
     console.error("Error fetching tenants:", error.message);
-
-    res.redirect('/view_tenent_error?email=' + encodeURIComponent(userEmail)); // ✅ userEmail is now accessible
+    res.redirect("/home?error=Failed to fetch tenant data.");
   }
 });
 
 
 app.get("/view_tenent_error",(req,res)=>{
   const userEmail = req.query.email || "guest@example.com"; // Get email from URL
-    console.log(userEmail)
+    // console.log(userEmail)
   res.render("view_tenent_error",{userEmail:userEmail})
 })
 // app.get("/view_tenent_error",(req,res)=>{
@@ -271,7 +292,7 @@ app.get('/edit_tenent/:userId', async (req, res) => {
   const userdta=await Tenants.doc(userId).get();
   const userData= userdta.data();
   
-console.log(userId)
+// console.log(userId)
   res.render('edit_tenent', { userId: userId ,userData:userData});
 });
 
@@ -282,7 +303,7 @@ app.post("/edit_tenent/:userId", async (req, res) => {
   const { name, mobile, previousAddress, RoomRent } = req.body;
 
   try {
-      console.log("Updating tenant:", { name, mobile, previousAddress, RoomRent });
+      // console.log("Updating tenant:", { name, mobile, previousAddress, RoomRent });
 
       // Update the tenant's details
       await Tenants.doc(userId).update({ name, mobile, previousAddress, RoomRent });
@@ -300,7 +321,7 @@ app.post("/edit_tenent/:userId", async (req, res) => {
 app.get("/Tenent_bill_history/:id", async (req, res) => {
   try {
     const tenantId = req.params.id;
-    console.log("Searching for bill history for Tenant ID:", tenantId);
+    // console.log("Searching for bill history for Tenant ID:", tenantId);
 
     // Query Firestore for all bill history records with the specified tenantId
     const historySnapshot = await Tenants_bill_history.where("tenent_id", "==", tenantId).get();
@@ -310,16 +331,16 @@ app.get("/Tenent_bill_history/:id", async (req, res) => {
       billHistory.push({ id: doc.id, ...doc.data() });
     });
 
-    console.log("Bill History:", billHistory);
+    // console.log("Bill History:", billHistory);
     
     if (billHistory.length === 0) {
-      console.log("No bill history found for Tenant ID:", tenantId);
+      // console.log("No bill history found for Tenant ID:", tenantId);
       return res.render("Tenent_bill_history_error", { userId: tenantId });
     }
 
     res.render("Tenent_bill_history", { history: billHistory });
   } catch (error) {
-    console.error("Error fetching bill history:", error);
+    // console.error("Error fetching bill history:", error);
     res.render("Tenent_bill_history_error", { userId: req.params.id });
   }
 });
@@ -339,7 +360,7 @@ app.get("/history/details/:tenant_id/:bill_id", async (req, res) => {
           tenant_id 
       });
   } catch (error) {
-      console.error("Error fetching bill details:", error);
+      // console.error("Error fetching bill details:", error);
       res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -356,7 +377,7 @@ app.get("/users", async (req, res) => {
     usersSnapshot.forEach((doc) => {
       const userData = doc.data();
       
-      console.log(userData);
+      // console.log(userData);
       users.push({
         id: doc.id, // Include the document ID
         name: userData.name,
@@ -376,7 +397,7 @@ app.post("/add-user", async (req, res) => {
     try {
         const { name, email, age } = req.body; // Get data from the form
         const newUserRef = await Users.add({ name, email, age });
-        console.log(`User added with ID: ${newUserRef.id}`);
+        // console.log(`User added with ID: ${newUserRef.id}`);
         
         res.redirect('/add'); // Redirect back to the form (or a success page)
     } catch (error) {
@@ -453,6 +474,16 @@ console.log(billHistory);
 });
 
     
+// Define routes here
+
+// Error-handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.redirect('/');
+});
+
+// Start the server
+
 
 const Port = process.env.PORT || 8000
 app.listen(Port, () => {

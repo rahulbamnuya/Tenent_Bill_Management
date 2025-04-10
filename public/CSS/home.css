@@ -1,157 +1,120 @@
-/* General Styling */
+
+
+
 .main-content {
-    padding: 20px;
+    padding-top: 60px;
 }
 
-/* Card Grid */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
 }
 
-/* Cards */
 .card {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s ease-in-out;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    padding: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: bold;
+    font-size: 18px;
+    font-weight: 600;
+    color: #007BFF;
+    margin-bottom: 10px;
 }
 
 .card-value {
-    font-size: 2rem;
+    font-size: 32px;
     font-weight: bold;
-    margin-top: 10px;
+    color: #333;
 }
 
 .card-subtext {
+    font-size: 14px;
     color: #777;
-    font-size: 0.9rem;
+    margin-top: 5px;
 }
 
-/* Edit Button */
+.user-icon,
+.lease-icon {
+    font-size: 22px;
+    color: #007BFF;
+}
+
 .edit-btn {
-    background: #3498db;
-    color: white;
+    background-color: #ffc107;
     border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
     cursor: pointer;
-    font-size: 0.9rem;
-    transition: 0.3s;
+    color: #fff;
 }
 
 .edit-btn:hover {
-    background: #2980b9;
+    background-color: #e0a800;
 }
 
-/* Edit Form */
-.hidden {
-    display: none;
-}
-
-#edit-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-#new-price {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-}
-
-/* Form Buttons */
-.form-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.btn {
-    padding: 8px 12px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.save-btn {
-    background: #27ae60;
-    color: white;
-}
-
-.save-btn:hover {
-    background: #219150;
-}
-
-.cancel-btn {
-    background: #e74c3c;
-    color: white;
-}
-
-.cancel-btn:hover {
-    background: #c0392b;
-}
-
-/* Action Buttons */
 .actions {
-    margin-top: 20px;
     display: flex;
-    gap: 15px;
+    flex-wrap: wrap;
+    gap: 20px;
     justify-content: center;
 }
 
-.actions .btn {
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 10px 20px;
+.btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
 }
 
-.primary {
-    background: #2ecc71;
+
+.btn.primary {
+    background-color: #007BFF;
     color: white;
+    border: none;
 }
 
-.primary:hover {
-    background: #27ae60;
+.btn.primary:hover {
+    background-color: #0056b3;
 }
 
-.secondary {
-    background: #f39c12;
+.btn.secondary {
+    background-color: #6c757d;
     color: white;
+    border: none;
 }
 
-.secondary:hover {
-    background: #e67e22;
+.btn.secondary:hover {
+    background-color: #5a6268;
 }
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
-
-    .actions {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .btn {
-        width: 100%;
-    }
-}
+.profile-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .user-icon {
+    font-size: 22px;
+  }
+  

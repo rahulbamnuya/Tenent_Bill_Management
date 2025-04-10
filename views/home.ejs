@@ -33,7 +33,7 @@
                               <div class="card-header">
                                     <span>Bill Unit</span>
                                     <i class="fas fa-file-invoice-dollar lease-icon"></i>
-                                    <button class="edit-btn" onclick="editBillUnit()">Edit</button>
+                                    
                               </div>
 
                               <div class="card-value" id="bill-unit-value">Rs.<%= newPrice %>
@@ -46,16 +46,19 @@
 
                   <!-- Action Buttons -->
                   <div class="actions" style="margin-top: 20px;">
-                        <a href="/addTenant?email=<%= userEmail %>">
+                        <a href="/addTenant">
                               <button class="btn primary">+ Add New Tenant</button>
-                        </a>
-                        <a href="/view_tenent?email=<%= userEmail %>">
+                            </a>
+                            
+                        <a href="/view_tenent">
                               <button class="btn secondary">View All Tenants</button>
-                        </a>
+                            </a>
+                            
                   </div>
             </main>
 
-                 
+           
+                   
 </body>
 
 </html>
