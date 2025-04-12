@@ -59,7 +59,7 @@ app.post("/login", async (req, res) => {
         email: email,
         isLoggedIn: true
       };
-
+console.log("User logged in:", email,req.session.user.isLoggedIn);
       // console.log("✅ User logged in and session started!");
       return res.redirect("/home");
     } else {
@@ -183,10 +183,16 @@ app.get("/detail/:userId", async (req, res) => {
 ///X
 // app.js
 app.get("/addTenant", (req, res) => {
-  const userEmail = req.session.userEmail || "guest@example.com";
-  console.log("Session Email:", userEmail);
-  res.render("addTenant", { userEmail: userEmail });
+  const userEmail = req.session.user ? req.session.user.email : null;  // Get email from session
+  if (userEmail) {
+    console.log("Session Email:", userEmail);
+    res.render("addTenant", { userEmail: userEmail });
+  } else {
+    // If no session exists or the user is not logged in, redirect to login page
+    res.redirect("/login?error=You need to log in first.");
+  }
 });
+
 
 app.post("/add_new",async (req,res)=>{
    try {
@@ -240,6 +246,7 @@ app.get("/view_tenent", async (req, res) => {
   }
 
   const userEmail = req.session.user.email;
+  // console.log("Session Email:", userEmail);
 
   try {
     // console.log(`Searching for tenants with email: ${userEmail}`);
