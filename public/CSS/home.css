@@ -52,6 +52,27 @@
     font-size: 22px;
     color: #007BFF;
 }
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f7f7f7;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    position: relative; /* Allow image to be positioned absolute inside this container */
+}
+
+.card-header .header-image {
+    position: absolute;
+    right: 15px; /* Adjust the right position to place it at the end */
+    top: 50%;
+    transform: translateY(-50%); /* Vertically center the image */
+    width: 40px; /* Image size */
+    height: 40px; /* Image size */
+    border-radius: 50%; /* Optional: make it circular */
+    object-fit: cover; /* Ensures the image fits inside the circle */
+}
 
 .edit-btn {
     background-color: #ffc107;

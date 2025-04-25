@@ -4,6 +4,8 @@ const Users = require("./firebase.ejs").Users; // Import Users collection
 const Tenants=require("./firebase.ejs").Tenants;
 const LoginUsers=require("./firebase.ejs").LoginUsers;
 const Tenants_bill_history=require("./firebase.ejs").Tenants_bill_history
+const { createSession, destroySession } = require('./utils/sessionManager');
+
 const app = express();
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, "public")));
@@ -24,6 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 const session = require('express-session');
+const { log } = require("console");
 
 app.use(session({
   secret: 'qwertyuiop', // 🔐 Session key
@@ -31,17 +34,33 @@ app.use(session({
   saveUninitialized: false,             // Don't save empty sessions
   cookie: {
     secure: false,                      // Set true only if using HTTPS
-    maxAge: 1000 * 60 * 60 * 1          // 1 hour
+    maxAge: 1000 * 60 * 60         // 1 hour
   }
 }));
 
+function isAuthenticated(req, res, next) {
+  if (req.session && req.session.user) {
+    return next();
+  } else {
+    console.log("User not authenticated, redirecting to login page.");
+    return res.redirect('/login');
+  }
+}
+
+// Example: Logout route
+
+
+
 // Route to display the add user form
+
 app.get("/",(req, res) => {
-   res.render("login")
+   res.render("intro")
 });
 
 
-
+app.get("/login", (req, res) => {
+  res.render("login");
+})
 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
@@ -71,7 +90,22 @@ console.log("User logged in:", email,req.session.user.isLoggedIn);
     return res.redirect("/login?error=Internal server error.");
   }
 });
-app.get("/home", async (req, res) => {
+app.get('/logout', (req, res) => {
+  // Destroy the session
+  req.session.destroy((err) => {
+      if (err) {
+          return res.status(500).json({ success: false, message: 'Failed to destroy session' });
+      }
+      
+      // Clear session cookie
+      res.clearCookie('connect.sid');
+      
+      // Redirect to the homepage or login page after logout
+      res.redirect('/login'); // Redirect to the login page (or another page as needed)
+  });
+});
+
+app.get("/home", isAuthenticated,async (req, res) => {
   // ✅ Use session to get email, not from query
   if (!req.session.user || !req.session.user.isLoggedIn) {
     return res.redirect("/login?error=Please log in first.");
@@ -136,11 +170,11 @@ app.post("/signup", async (req, res) => {
 
 
 
-app.get("/add", (req, res) => {
+app.get("/add", isAuthenticated,(req, res) => {
     res.render("index"); // Render the add_user.ejs file
 });
 
-app.post("/edit_bill_amount", async (req, res) => {
+app.post("/edit_bill_amount", isAuthenticated,async (req, res) => {
  
  
   const newPrice = req.body.newPrice; // Access newPrice from req.body
@@ -161,7 +195,7 @@ const tenent_count=5
 
 
 
-app.get("/detail/:userId", async (req, res) => {
+app.get("/detail/:userId", isAuthenticated,async (req, res) => {
     try {
         const userId = req.params.userId;
         const user = await Tenants.doc(userId).get();
@@ -182,7 +216,7 @@ app.get("/detail/:userId", async (req, res) => {
 
 ///X
 // app.js
-app.get("/addTenant", (req, res) => {
+app.get("/addTenant", isAuthenticated,(req, res) => {
   const userEmail = req.session.user ? req.session.user.email : null;  // Get email from session
   if (userEmail) {
     console.log("Session Email:", userEmail);
@@ -194,7 +228,7 @@ app.get("/addTenant", (req, res) => {
 });
 
 
-app.post("/add_new",async (req,res)=>{
+app.post("/add_new",isAuthenticated,async (req,res)=>{
    try {
         const { name, mobile, room,previousAddress,RoomRent,userEmail } = req.body; // Get data from the form
         // console.log(name,mobile,room,previousAddress,RoomRent,userEmail)
@@ -209,12 +243,12 @@ app.post("/add_new",async (req,res)=>{
     }
 })
 ///X
-app.get("/add_new_bill/:id",(req,res)=>{
+app.get("/add_new_bill/:id",isAuthenticated,(req,res)=>{
    const userId = req.params.id;
   //  console.log(userId)
   res.render("add_new_bill",{userId:userId})
 })
-app.post("/add_new_bill/:id", async (req,res)=>{
+app.post("/add_new_bill/:id", isAuthenticated,async (req,res)=>{
    const userId = req.params.id;
   // console.log("hello")
   //  console.log(userId)
@@ -239,7 +273,7 @@ const data=bill_id.data();
 res.redirect("/Tenent_bill_history/"+data.tenent_id);
 });
 
-app.get("/view_tenent", async (req, res) => {
+app.get("/view_tenent", isAuthenticated,async (req, res) => {
   // 🔒 Check if user is logged in
   if (!req.session.user || !req.session.user.isLoggedIn) {
     return res.redirect("/login?error=Please log in first.");
@@ -284,7 +318,7 @@ app.get("/view_tenent", async (req, res) => {
 });
 
 
-app.get("/view_tenent_error",(req,res)=>{
+app.get("/view_tenent_error",isAuthenticated,(req,res)=>{
   const userEmail = req.query.email || "guest@example.com"; // Get email from URL
     // console.log(userEmail)
   res.render("view_tenent_error",{userEmail:userEmail})
@@ -294,6 +328,27 @@ app.get("/view_tenent_error",(req,res)=>{
 //     console.log(userEmail)
 //   res.redirect('/addTenant?email=' + encodeURIComponent(userEmail))
 // })
+app.get('/delete_tenent/:id', async (req, res) => {
+  const tenantId = req.params.id;
+  console.log(tenantId);
+
+  try {
+      // Reference the tenant document in Firestore
+      const tenantRef = Tenants.doc(tenantId);
+      
+      // Delete the document
+      await tenantRef.delete(); // This actually deletes the document
+
+        console.log(`Tenant with ID ${tenantId} deleted successfully`);
+
+      
+      // Redirect to the tenant list or wherever you'd like after deletion
+      res.redirect('/view_tenent');
+  } catch (err) {
+      console.error('Error deleting tenant:', err);
+      res.status(500).send('Error deleting tenant');
+  }
+});
 app.get('/edit_tenent/:userId', async (req, res) => {
   const userId = req.params.userId;
   const userdta=await Tenants.doc(userId).get();
@@ -303,7 +358,7 @@ app.get('/edit_tenent/:userId', async (req, res) => {
   res.render('edit_tenent', { userId: userId ,userData:userData});
 });
 
-app.post("/edit_tenent/:userId", async (req, res) => {
+app.post("/edit_tenent/:userId", isAuthenticated,async (req, res) => {
   const userId = req.params.userId;
   const userEmail = req.query.email; // ✅ Declare userEmail outside try block
 
@@ -325,7 +380,7 @@ app.post("/edit_tenent/:userId", async (req, res) => {
 
 
 
-app.get("/Tenent_bill_history/:id", async (req, res) => {
+app.get("/Tenent_bill_history/:id", isAuthenticated,async (req, res) => {
   try {
     const tenantId = req.params.id;
     // console.log("Searching for bill history for Tenant ID:", tenantId);
@@ -352,7 +407,7 @@ app.get("/Tenent_bill_history/:id", async (req, res) => {
   }
 });
 // Route to fetch and display bill details
-app.get("/history/details/:tenant_id/:bill_id", async (req, res) => {
+app.get("/history/details/:tenant_id/:bill_id", isAuthenticated,async (req, res) => {
   const { tenant_id, bill_id } = req.params;
 
   try {
@@ -376,7 +431,7 @@ app.get("/history/details/:tenant_id/:bill_id", async (req, res) => {
 
 
 
-app.get("/users", async (req, res) => {
+app.get("/users", isAuthenticated,async (req, res) => {
   try {
     const usersSnapshot = await Users.get(); // Fetch all users from Firestore
     const users = [];
@@ -400,7 +455,7 @@ app.get("/users", async (req, res) => {
   }
 });
 // Route to handle form submission
-app.post("/add-user", async (req, res) => {
+app.post("/add-user", isAuthenticated,async (req, res) => {
     try {
         const { name, email, age } = req.body; // Get data from the form
         const newUserRef = await Users.add({ name, email, age });
@@ -415,7 +470,7 @@ app.post("/add-user", async (req, res) => {
  
 
 
-app.get('/edit-user/:userId', async (req, res) => {
+app.get('/edit-user/:userId',isAuthenticated, async (req, res) => {
   try {
     const userId = req.params.userId;
     const userDoc = await Users.doc(userId).get();
@@ -434,7 +489,7 @@ app.get('/edit-user/:userId', async (req, res) => {
 });
 
 // Route to handle user update
-app.post('/update-user/:userId', async (req, res) => {
+app.post('/update-user/:userId', isAuthenticated,async (req, res) => {
   try {
     const userId = req.params.userId;
     const { name, email, age } = req.body;
@@ -449,7 +504,7 @@ app.post('/update-user/:userId', async (req, res) => {
 });
 
 // Route to handle user deletion
-app.post('/delete-user/:userId', async (req, res) => {
+app.post('/delete-user/:userId', isAuthenticated,async (req, res) => {
   try {
     const userId = req.params.userId;
     await Users.doc(userId).delete();

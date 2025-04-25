@@ -36,7 +36,18 @@
     align-items: center;
     gap: 6px;
   }
-  
+  .logout-link {
+    color: white; /* Makes the text white */
+    font-weight: bold; /* Makes the text bold */
+    text-decoration: none; /* Removes the underline from the link */
+    display: flex; /* Ensures the icon and text are aligned */
+    align-items: center; /* Centers the icon vertically with the text */
+}
+
+.logout-link:hover {
+    color: #2980b9; /* Optional: change color when hovered */
+}
+
   .user-icon {
     font-size: 22px;
   }

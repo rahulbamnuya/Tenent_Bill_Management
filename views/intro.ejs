@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TenantManager</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+ <link rel="stylesheet" href="CSS/intro.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <i class="fas fa-building"></i> TenantManager
+      </div>
+      <button class="skip-btn" onclick="goToLogin()">Skip</button>
+    </header>
+
+    <!-- Slide 1 -->
+    <div id="slide1" class="slide active-slide">
+      <div class="slide-content">
+        <img src="https://img.freepik.com/free-vector/landing-page-concept-house-searching_23-2148298747.jpg?semt=ais_hybrid&w=740" alt="TenantManager App" class="slide-img" />
+        <h1>Manage Properties Easily</h1>
+        <p>Handle rent payments, maintenance requests, and tenant details in one place.</p>
+      </div>
+      <button class="cta-btn" onclick="showSlide(2)">Next</button>
+      <div class="dots">
+        <div class="dot active" onclick="showSlide(1)"></div>
+        <div class="dot" onclick="showSlide(2)"></div>
+      </div>
+    </div>
+
+    <!-- Slide 2 -->
+    <div id="slide2" class="slide">
+      <div class="slide-content">
+        <div class="features">
+          <div class="feature">
+            <div class="feature-icon"><i class="fas fa-money-bill"></i></div>
+            <div>
+              <h3>Payment Tracking</h3>
+              <p>Record payments and send reminders</p>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon"><i class="fas fa-tools"></i></div>
+            <div>
+              <h3>Maintenance</h3>
+              <p>Manage repair requests quickly</p>
+            </div>
+          </div>
+          <div class="feature">
+            <div class="feature-icon"><i class="fas fa-comments"></i></div>
+            <div>
+              <h3>Communication</h3>
+              <p>Chat with tenants easily</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="login-btn" onclick="goToLogin()">Sign In</button>
+      <button class="secondary-btn" onclick="goToSignup()">Create Account</button>
+
+      <div class="dots">
+        <div class="dot" onclick="showSlide(1)"></div>
+        <div class="dot active" onclick="showSlide(2)"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function showSlide(slideNum) {
+      document.querySelectorAll('.slide').forEach(slide => {
+        slide.classList.remove('active-slide');
+      });
+      document.getElementById('slide' + slideNum).classList.add('active-slide');
+
+      document.querySelectorAll('.dot').forEach(dot => dot.classList.remove('active'));
+      document.querySelectorAll('.dot')[slideNum - 1].classList.add('active');
+    }
+
+    function goToLogin() {
+  window.location.href = "/login";
+}
+
+
+    function goToSignup() {
+      window.location.href = "/signup";
+    }
+  </script>
+</body>
+</html>

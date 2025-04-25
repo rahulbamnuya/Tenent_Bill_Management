@@ -30,6 +30,14 @@
             .back-button:active {
                   transform: scale(0.98);
             }
+            .tenant-icon {
+  width: 60px;  /* Set the size of the image */
+  height: 60px;
+  border-radius: 50%;  /* Optional: to make it circular */
+  margin-right: 10px;  /* Space between the image and text */
+  vertical-align: middle;  /* Align the image with the text */
+}
+
       </style>
 </head>
 
@@ -41,6 +49,7 @@
 
             <div class="tenant-list">
                   <div class="tenant-list-header">
+                        
                         <span>Room No.</span>
                         <span>Name</span>
                         <span>Detail</span>
@@ -50,7 +59,7 @@
                   <a href="/detail/<%= user.id %>">
                         <div class="tenant-row">
                               <span><%= user.room %></span>
-                              <span><%= user.name %></span>
+                              <span><img src="https://th.bing.com/th/id/OIP.zs9g3emlEhLN16b1z5_CzwHaHa?w=199&h=199&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Tenant Icon" class="tenant-icon"><%= user.name %></span>
                               <span class="status eviction">See</span>
                               
                         </div>

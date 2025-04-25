@@ -8,6 +8,16 @@
       <title>Tenant Management Dashboard</title>
       <link rel="stylesheet" href="/CSS/header.css">
       <link rel="stylesheet" href="/CSS/add_new_bill.css">
+      <style>
+            .tenant-icon {
+  width: 50px;  /* Set the size of the image */
+  height: 50px;
+  border-radius: 50%;  /* Optional: to make it circular */
+  margin-right: 10px;  /* Space between the image and text */
+  vertical-align: middle;  /* Align the image with the text */
+}
+
+      </style>
 
 </head>
 
@@ -19,7 +29,11 @@
                         <div class="dialog" id="add-bill-dialog">
                               <div class="dialog-content">
                                     <form class="Bill-form" action="/add_new_bill/<%=userId%>" method="POST">
-                                    <h3>Add New Bill</h3>
+                                          <h3>
+                                                <img src="https://th.bing.com/th/id/OIP.llqpHFSl1hp2tM9ZIBtumgHaHa?w=188&h=188&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Tenant Icon" class="tenant-icon">
+                                                <i class="fas fa-user"></i> Add New Bill
+                                              </h3>
+                                    
                                     <div class="form-group">
                                           <label for="previous-reading">Previous Reading</label>
                                           <input type="text" id="previous_reading" name="previous_reading" value="1000" >
