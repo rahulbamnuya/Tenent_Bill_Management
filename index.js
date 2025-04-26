@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.set("view engine", "ejs");
 // console.log(Tenants)
-
+app.use(express.static('public'));
 const PORT = process.env.PORT || 3000;
 
 // Set up EJS as the view engine
@@ -313,6 +313,7 @@ app.get("/view_tenent", isAuthenticated,async (req, res) => {
     res.render("view_tenent", { users, userEmail });
   } catch (error) {
     console.error("Error fetching tenants:", error.message);
+
     res.redirect("/home?error=Failed to fetch tenant data.");
   }
 });
@@ -426,6 +427,7 @@ app.get("/history/details/:tenant_id/:bill_id", isAuthenticated,async (req, res)
       res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 
 
