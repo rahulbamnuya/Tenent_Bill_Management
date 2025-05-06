@@ -8,6 +8,31 @@ This is a web application that allows users to manage tenants, view tenant detai
 - **Tenant Management**: Users can add, view, edit, and delete tenants.
 - **Billing**: Users can add and view bill history for each tenant.
 - **Session Management**: User sessions are maintained using cookies.
+  
+## Screenshorts
+**Introduction** :
+![Screenshot 1](https://github.com/rahulbamnuya/Tenent_Bill_Management/raw/main/public/images/Screenshot%202025-05-06%20235227.png)
+
+**Login/Signup** :
+![Screenshot 3](https://github.com/rahulbamnuya/Tenent_Bill_Management/raw/main/public/images/Screenshot%202025-05-06%20235252.png)
+**Home Page** :
+![Screenshot 4](https://github.com/rahulbamnuya/Tenent_Bill_Management/raw/main/public/images/Screenshot%202025-05-06%20235308.png)
+**Add Tenent** :
+![Screenshot 8](https://github.com/rahulbamnuya/Tenent_Bill_Management/raw/main/public/images/Screenshot%202025-05-06%20235723.png)
+**View Tenent** :
+![Screenshot 5](https://github.com/rahulbamnuya/Tenent_Bill_Management/raw/main/public/images/Screenshot%202025-05-06%20235324.png)
+**Tenent Detail** :
+![Screenshot 6](https://github.com/rahulbamnuya/Tenent_Bill_Management/raw/main/public/images/Screenshot%202025-05-06%20235336.png)
+**Add Tenent Bill** :
+![Screenshot 9](https://github.com/rahulbamnuya/Tenent_Bill_Management/raw/main/public/images/Screenshot%202025-05-06%20235759.png)
+**Send and Histry of Bill** :
+
+![Screenshot 7](https://github.com/rahulbamnuya/Tenent_Bill_Management/raw/main/public/images/Screenshot%202025-05-06%20235404.png)
+
+
+
+
+
 
 ## Prerequisites
 
