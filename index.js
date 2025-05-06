@@ -413,6 +413,9 @@ app.get("/history/details/:tenant_id/:bill_id", isAuthenticated,async (req, res)
 
   try {
       const doc = await Tenants_bill_history.doc(bill_id).get();
+      const billHistory = await Tenants.doc(tenant_id).get();
+      // console.log("Bill History:", billHistory.data());
+      // console.log("Bill ID:", bill_id);
 
       if (!doc.exists) {
           return res.status(404).json({ message: "Bill history not found." });
@@ -427,6 +430,55 @@ app.get("/history/details/:tenant_id/:bill_id", isAuthenticated,async (req, res)
       res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
+app.get('/Tenent_bill_history_send_message/:tenant_id/:bill_id', isAuthenticated, async (req, res) => {
+  try {
+    const tenant_id = req.params.tenant_id;
+    const bill_id = req.params.bill_id;
+
+    // Fetch the bill details
+    const doc = await Tenants_bill_history.doc(bill_id).get();
+    const bill = doc.data();
+
+    // Fetch tenant details
+    const billHistory = await Tenants.doc(tenant_id).get();
+    const tenant = billHistory.data();
+
+    // Ensure tenant and bill exist
+    if (!tenant || !bill) {
+      return res.status(404).json({ success: false, error: "Tenant or Bill not found" });
+    }
+
+    // Create a custom message without emojis
+    const message = `Electricity Bill\n\n` +
+      `Name: ${tenant.name}\n` +
+      `Date: ${bill.bill_date}\n` +
+      `Current Reading: ${bill.current_reading}\n` +
+      `Previous Reading: ${bill.previous_reading}\n` +
+      `Units Used: ${bill.month_reading}\n` +
+      `Amount Due: Rs. ${bill.bill_amount}\n\n` +
+      `Please pay at your convenience.`;
+
+    // Format phone number (remove any non-numeric characters)
+    const phone = tenant.mobile.replace(/[^0-9]/g, "");
+
+    // Encode the message for URL
+    const encodedMessage = encodeURIComponent(message);
+
+    // Create the WhatsApp URL for the message
+    const waURL = `https://wa.me/${phone}?text=${encodedMessage}`;
+
+    // Return the WhatsApp URL as part of the response
+    res.json({ success: true, whatsapp_url: waURL });
+
+  } catch (error) {
+    console.error("WhatsApp send error:", error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+});
+
+
+
 
 
 

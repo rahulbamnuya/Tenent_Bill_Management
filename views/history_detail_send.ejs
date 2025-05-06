@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill Details</title>
+    <link rel="stylesheet" href="/CSS/header.css">
+    <link rel="stylesheet" href="/CSS/history_detail.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+
+    <div class="bill-container">
+        <div class="bill-header">Bill Details</div>
+
+        <div class="bill-details">
+            <div class="bill-item"><span class="bill-label">Date:</span> <span class="bill-value"><%= bill.bill_date %></span></div>
+            <div class="bill-item"><span class="bill-label">Month Reading:</span> <span class="bill-value"><%= bill.month_reading %></span></div>
+            <div class="bill-item"><span class="bill-label">Current Reading:</span> <span class="bill-value"><%= bill.current_reading %></span></div>
+            <div class="bill-item"><span class="bill-label">Previous Reading:</span> <span class="bill-value"><%= bill.previous_reading %></span></div>
+            <div class="bill-item"><span class="bill-label">Bill Amount:</span> <span class="bill-value">Rs. <%= bill.bill_amount %></span></div>
+        </div>
+
+        <div class="message-preview">
+            <h3>Message Preview</h3>
+            <pre style="background:#f0f0f0; padding:10px; border-radius:8px;"><%= message %></pre>
+        </div>
+
+        <div class="button-group" style="margin-top: 20px;">
+            <a href="/Tenent_bill_history/<%= tenant_id %>" class="btn-primary">Go Back</a>
+            <a href="/Tenent_bill_history_send_message/<%= tenant_id %>/<%= bill.id %>" class="btn-primary">Send Message</a>
+
+            <!-- WhatsApp send button -->
+            <a 
+                class="btn-primary" 
+                target="_blank"
+                href="https://wa.me/<%= tenant.mobile %>?text=<%= encodeURIComponent(message) %>">
+                Send via WhatsApp
+            </a>
+        </div>
+    </div>
+</body>
+</html>
